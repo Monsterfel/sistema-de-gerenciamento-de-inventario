@@ -1,0 +1,66 @@
+SET SQL_SAFE_UPDATES = 0;
+drop database InventarioArmazem;
+CREATE DATABASE InventarioArmazem;
+
+-- Uso do banco de dados
+USE InventarioArmazem;
+
+-- Criação da tabela Categorias
+CREATE TABLE Categorias (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(50) NOT NULL
+);
+
+-- Criação da tabela Fornecedores
+CREATE TABLE Fornecedores (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(100) NOT NULL,
+    Contato VARCHAR(100)
+);
+
+-- Criação da tabela Produtos
+CREATE TABLE Produtos (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    Nome VARCHAR(100) NOT NULL,
+    CategoriaID INT,
+    FornecedorID INT,
+    Quantidade INT NOT NULL,
+    Preco DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (CategoriaID) REFERENCES Categorias(ID),
+    FOREIGN KEY (FornecedorID) REFERENCES Fornecedores(ID)
+);
+
+-- Inserção de dados na tabela Categorias
+INSERT INTO Categorias (Nome) VALUES
+('Eletrônicos'),
+('Móveis'),
+('Roupas');
+
+-- Inserção de dados na tabela Fornecedores
+INSERT INTO Fornecedores (Nome, Contato) VALUES
+('Fornecedor A', 'contato@fornecedora.com'),
+('Fornecedor B', 'contato@fornecedorb.com');
+
+-- Inserção de dados na tabela Produtos
+INSERT INTO Produtos (Nome, CategoriaID, FornecedorID, Quantidade, Preco) VALUES
+('Smartphone', 1, 1, 50, 1500.00),
+('Sofá', 2, 2, 20, 2500.00),
+('Camiseta', 3, 1, 100, 50.00);
+
+-- Seleção de todos os produtos
+SELECT * FROM Produtos;
+
+-- Atualização da quantidade de um produto
+UPDATE Produtos
+SET Quantidade = 45
+WHERE Nome = 'Smartphone';
+
+-- Exclusão de um produto
+DELETE FROM Produtos
+WHERE Nome = 'Camiseta';
+
+-- Junção para exibir informações detalhadas sobre produtos
+SELECT p.Nome AS Produto, c.Nome AS Categoria, f.Nome AS Fornecedor, p.Quantidade, p.Preco
+FROM Produtos p
+JOIN Categorias c ON p.CategoriaID = c.ID
+JOIN Fornecedores f ON p.FornecedorID = f.ID;
